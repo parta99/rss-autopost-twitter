@@ -23,7 +23,7 @@ async function postFeed() {
     // Loop through items in feed and post to Twitter
     feed.items.forEach(async (item) => {
       // Check if item has already been posted
-      const status = await T.get('statuses/user_timeline', { screen_name: 'your_twitter_handle', count: 1 });
+      const status = await T.get('statuses/user_timeline', { screen_name: '@fsbali88', count: 1 });
       const alreadyPosted = status.data.some((tweet) => tweet.text === item.title);
 
       // Post to Twitter if item has not already been posted
