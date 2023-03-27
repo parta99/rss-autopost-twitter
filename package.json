@@ -1,0 +1,25 @@
+{
+  "name": "rss-autopost-twitter",
+  "version": "1.0.0",
+  "description": "membuat auto posting di twitter dengan rss feed",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/parta99/rss-autopost-twitter.git"
+  },
+  "author": "@djna911",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/parta99/rss-autopost-twitter/issues"
+  },
+  "homepage": "https://github.com/parta99/rss-autopost-twitter#readme",
+  "dependencies": {
+    "cron": "^2.3.0",
+    "dotenv": "^16.0.3",
+    "rss-parser": "^3.12.0",
+    "twitter": "^1.1.0"
+  }
+}
