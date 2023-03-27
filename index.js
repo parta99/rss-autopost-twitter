@@ -1,71 +1,41 @@
+// Import dependencies
 const Parser = require('rss-parser');
-const Twitter = require('twitter');
-const CronJob = require('cron').CronJob;
-const dotenv = require('dotenv');
+const Twit = require('twit');
+require('dotenv').config();
 
-// const fs = require('fs');
-// const config = JSON.parse(fs.readFileSync('config.json'));
-// const rssUrl = config.rssUrl;
-const rssUrl = 'http://news.google.com/news?hl=en&gl=us&q=bali&um=1&ie=UTF-8&output=rss';
-
-
-// Konfigurasi dotenv
-dotenv.config();
-
-// Konfigurasi parser RSS
-const parser = new Parser();
-
-// Konfigurasi client Twitter
-const client = new Twitter({
+// Set up Twitter client
+const T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+  access_token: process.env.TWITTER_ACCESS_TOKEN,
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
-// Fungsi untuk mengambil data dari RSS feed
-async function getFeedData(url) {
-  let feed = await parser.parseURL(url);
-  return feed.items;
-}
-getFeedData(rssUrl)
-  .then(items => {
-    console.log(items);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+// Set up RSS parser
+const parser = new Parser();
 
-// Fungsi untuk mengirim tweet ke Twitter
-function postTweet(text) {
-  client.post('statuses/update', {status: text}, function(error, tweet, response) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(tweet);
-    }
-  });
-}
-
-// Fungsi untuk menjalankan auto post
-async function runAutoPost() {
+// Set up function to get and post RSS feed
+async function postFeed() {
   try {
-    // Ambil data dari RSS feed
-    const items = await getFeedData(process.env.RSS_FEED_URL);
+    // Parse RSS feed
+    const feed = await parser.parseURL('http://news.google.com/news?hl=en&gl=us&q=bali&um=1&ie=UTF-8&output=rss');
 
-    // Kirim tweet untuk setiap item pada RSS feed
-    items.forEach((item) => {
-      let tweet = item.title + ' ' + item.link;
-      postTweet(tweet);
+    // Loop through items in feed and post to Twitter
+    feed.items.forEach(async (item) => {
+      // Check if item has already been posted
+      const status = await T.get('statuses/user_timeline', { screen_name: 'your_twitter_handle', count: 1 });
+      const alreadyPosted = status.data.some((tweet) => tweet.text === item.title);
+
+      // Post to Twitter if item has not already been posted
+      if (!alreadyPosted) {
+        const tweet = await T.post('statuses/update', { status: item.title + ' ' + item.link });
+        console.log('Tweet posted: ' + tweet.data.text);
+      }
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.error(err);
   }
 }
 
-// Jalankan auto post pada interval tertentu menggunakan CronJob
-const job = new CronJob(process.env.CRON_INTERVAL, function() {
-  runAutoPost();
-}, null, true, process.env.TIMEZONE);
-
-job.start();
+// Call function to post RSS feed on a schedule (every 30 minutes)
+setInterval(postFeed, 30 * 60 * 1000);
