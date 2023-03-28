@@ -51,6 +51,7 @@ const timeDiff = (prev) => {
 };
 
 const FILENAME = "posted_articles.txt";
+const maxPost = 5;
 
 // Function to read posted articles from file
 function readPostedArticles() {
@@ -80,8 +81,14 @@ function writePostedArticles(articles) {
     (item) => !postedArticles.includes(item.link)
   );
 
+  // Get maximum unposted articles to post
+  const numUnposted = Math.min(maxPost, unpostedArticles.length);
+
+
   // Post unposted articles
-  for (const item of unpostedArticles) {
+  // for (const item of unpostedArticles) {
+  for (let i = 0; i < numUnposted; i++){
+    const item = unpostedArticles[i]; //tambahan
     const postDate = Date.parse(item.pubDate);
     const timeSincePost = timeDiff(postDate);
     const status = `${timeSincePost} "${item.title}". ${item.link}`;
