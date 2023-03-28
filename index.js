@@ -69,7 +69,7 @@ function writePostedArticles(articles) {
 
 (async () => {
   let feed = await parser.parseURL(
-    "http://news.google.com/news?hl=en&gl=us&q=bali&um=1&ie=UTF-8&output=rss"
+    "https://news.google.com/rss/search?hl=en-US&gl=US&q=malware&um=1&ie=UTF-8&ceid=US:en"
   );
 
   // Read posted articles from file
@@ -105,19 +105,3 @@ function writePostedArticles(articles) {
     );
   }
 })();
-
-// Function to calculate time difference
-// function timeDiff(pastTime) {
-//   const now = new Date().getTime();
-//   const diff = now - pastTime;
-//   const hours = Math.floor(diff / (1000 * 60 * 60));
-//   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-//   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-//   if (hours > 0) {
-//     return `(${hours}h ${minutes}m ago)`;
-//   } else if (minutes > 0) {
-//     return `(${minutes}m ${seconds}s ago)`;
-//   } else {
-//     return `(${seconds}s ago)`;
-//   }
-// }
