@@ -1,7 +1,5 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/87986a74-7531-411b-9f71-f7b4585e9eb5/deploy-status)](https://app.netlify.com/sites/lighthearted-hamster-250998/deploys)
 
-
-[![?branch=dev](https://api.netlify.com/api/v1/badges/87986a74-7531-411b-9f71-f7b4585e9eb5/deploy-status)](https://app.netlify.com/sites/lighthearted-hamster-250998/deploys)
 # rss-autopost-twitter
 <ul>
 <li>Pertama-tama, mengimpor dependensi yang diperlukan, yaitu rss-parser, twit, dan dotenv. 
