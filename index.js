@@ -51,7 +51,7 @@ const timeDiff = (prev) => {
 };
 
 const FILENAME = "posted_articles.txt";
-const maxPost = 5;
+// const maxPost = 5;
 
 // Function to read posted articles from file
 function readPostedArticles() {
@@ -69,9 +69,9 @@ function writePostedArticles(articles) {
 }
 
 (async () => {
-  let feed = await parser.parseURL(
-    "https://news.google.com/rss/search?hl=en-US&gl=US&q=malware&um=1&ie=UTF-8&ceid=US:en"
+  let feed = await parser.parseURL("https://news.google.com/rss/search?hl=en-US&gl=US&q=denpasar&um=1&ie=UTF-8&ceid=US:en"
   );
+
 
   // Read posted articles from file
   const postedArticles = readPostedArticles();
@@ -81,20 +81,14 @@ function writePostedArticles(articles) {
     (item) => !postedArticles.includes(item.link)
   );
 
-  // Get maximum unposted articles to post
-  const numUnposted = Math.min(maxPost, unpostedArticles.length);
-
-
   // Post unposted articles
-  // for (const item of unpostedArticles) {
-  for (let i = 0; i < numUnposted; i++){
-    const item = unpostedArticles[i]; //tambahan
+  for (const item of unpostedArticles) {
     const postDate = Date.parse(item.pubDate);
     const timeSincePost = timeDiff(postDate);
     const status = `${timeSincePost} "${item.title}". ${item.link}`;
 
     client.post(
-      "status/update",
+      "statuses/update",
       {
         status: status,
       },
