@@ -1,9 +1,12 @@
 const Twitter = require("twitter");
 const dotenv = require("dotenv");
 const Parser = require("rss-parser");
+const fs = require("fs");
+
 dotenv.config();
 
 const parser = new Parser();
+const FILENAME = "posted_articles.txt";
 const client = new Twitter({
     consumer_key: process.env.API_KEY,
     consumer_secret: process.env.API_SECRET_KEY,
@@ -48,53 +51,59 @@ const timeDiff = (prev) => {
     }
   };
 
-const maxPosts = 5; // maksimal artikel yang akan diposting
-const rssUrls = [
-  "https://news.google.com/rss/search?hl=en-US&gl=US&q=bali&um=1&ie=UTF-8&ceid=US:en",
-  "https://news.google.com/rss/search?hl=en-US&gl=US&q=malware&um=1&ie=UTF-8&ceid=US:en",
-];
+  // Memuat daftar URL dari file .env
+  // const urls = [
+  //   process.env.URL_1,
+  //   process.env.URL_2,
+  // ];
 
-const postedLinks = []; // array untuk menyimpan URL artikel yang sudah diposting
-
-(async () => {
-  for (const rssUrl of rssUrls) {
-    let feed = await parser.parseURL(rssUrl);
-
-    for (const item of feed.items.slice().reverse()) {
-      if (postedLinks.includes(item.link)) {
-        // Jika artikel sudah diposting, lanjut ke item berikutnya
-        continue;
+  const postTweet = async () => {
+    try {
+      const urls = process.env.RSS_FEED_URLS.split(",");
+  
+      const posted = fs.existsSync(FILENAME)
+        ? JSON.parse(fs.readFileSync(FILENAME))
+        : [];
+  
+      let feedItems = [];
+      for (let i = 0; i < urls.length; i++) {
+        const feed = await parser.parseURL(urls[i]);
+        feedItems = [...feedItems, ...feed.items];
       }
-
-      const postDate = Date.parse(item.pubDate);
-      const timeSincePost = timeDiff(postDate);
-      const status = `${timeSincePost} "${item.title}". ${item.link}`;
-
-      client.post(
-        "status/update",
-        {
-          status: status,
-        },
-        function (error, tweet, response) {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log(tweet);
-          }
-        }
+  
+      const nonPostedItems = feedItems.filter(
+        (item) => !posted.includes(item.guid)
       );
-
-      postedLinks.push(item.link); // tambahkan URL artikel ke dalam array postedLinks
-
-      if (postedLinks.length >= maxPosts) {
-        // Jika sudah mencapai jumlah maksimal artikel yang akan diposting, keluar dari loop
-        break;
+  
+      if (nonPostedItems.length > 0) {
+        const selectedPost = nonPostedItems[0];
+        const postDate = Date.parse(selectedPost.pubDate);
+        const timeSincePost = timeDiff(postDate);
+  
+        const postLink = selectedPost.link;
+        const status = `${timeSincePost} "${selectedPost.title}". ${postLink}`;
+  
+        client.post(
+          "statuses/update",
+          {
+            status: status,
+          },
+    
+          function (error, tweet, response) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(tweet);
+              posted.push(selectedPost.guid);
+              fs.writeFileSync(FILENAME, JSON.stringify(posted));
+            }
+          }
+        );
+      } else {
+        console.log("All articles already posted");
       }
+    } catch (error) {
+      console.log(error);
     }
-
-    if (postedLinks.length >= maxPosts) {
-      // Jika sudah mencapai jumlah maksimal artikel yang akan diposting, keluar dari loop
-      break;
-    }
-  }
-})();
+  };  
+  postTweet();
