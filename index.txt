@@ -1,5 +1,4 @@
 // untuk posted satu artikel saja
-// gunakan function ini
 const dotenv = require("dotenv");
 const Twitter = require("twitter");
 const Parser = require("rss-parser");
