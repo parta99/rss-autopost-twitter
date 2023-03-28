@@ -12,6 +12,7 @@ const client = new Twitter({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 });
 
+// Inspired by: https://www.geeksforgeeks.org/get-the-relative-timestamp-difference-between-dates-in-javascript/
 const timeDiff = (prev) => {
   if (!prev) {
     return null;
