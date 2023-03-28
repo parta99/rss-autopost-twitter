@@ -78,9 +78,13 @@ function writePostedArticles(articles) {
     const postedArticles = readPostedArticles();
 
     // Filter out posted articles
+    // const unpostedArticles = feed.items.filter(
+    //   (item) => !postedArticles.includes(item.link)
+    // );
     const unpostedArticles = feed.items.filter(
       (item) => !postedArticles.includes(item.link)
-    );
+    ).slice(-5);
+    
 
     // Get maximum unposted articles to post
     const numUnposted = Math.min(maxPost, unpostedArticles.length);
@@ -113,5 +117,5 @@ function writePostedArticles(articles) {
   };
 
   // Run postNews function every 30 minutes
-  setInterval(postNews, 30 * 60 * 1000);
+  setInterval(postNews, 10 * 60 * 1000);
 })();
