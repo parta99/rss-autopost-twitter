@@ -87,7 +87,7 @@ function writePostedArticles(articles) {
     const status = `${timeSincePost} "${item.title}". ${item.link}`;
 
     client.post(
-      "statuses/update",
+      "status/update",
       {
         status: status,
       },
