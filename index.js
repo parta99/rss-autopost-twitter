@@ -1,13 +1,10 @@
-const dotenv = require("dotenv");
-const Twitter = require("twitter");
 const Parser = require("rss-parser");
-
+const Twitter = require("twitter");
+const fs = require("fs");
+const dotenv = require("dotenv");
 dotenv.config();
 
-// get RSS feed
 const parser = new Parser();
-
-// Create a Twitter client to manage credentials
 const client = new Twitter({
   consumer_key: process.env.API_KEY,
   consumer_secret: process.env.API_SECRET_KEY,
@@ -15,12 +12,6 @@ const client = new Twitter({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 });
 
-// Generate a random integer, somewhere between 0 and the 'max' value provided
-const getRandomInt = (max) => {
-  return Math.floor(Math.random() * Math.floor(max));
-};
-
-// Inspired by: https://www.geeksforgeeks.org/get-the-relative-timestamp-difference-between-dates-in-javascript/
 const timeDiff = (prev) => {
   if (!prev) {
     return null;
@@ -58,32 +49,74 @@ const timeDiff = (prev) => {
   }
 };
 
-// Using an IIFE to call teh file, automatically run the function, and move on :)
+const FILENAME = "posted_articles.txt";
+
+// Function to read posted articles from file
+function readPostedArticles() {
+  if (fs.existsSync(FILENAME)) {
+    const data = fs.readFileSync(FILENAME, "utf8");
+    return data.trim().split("\n");
+  } else {
+    return [];
+  }
+}
+
+// Function to write posted articles to file
+function writePostedArticles(articles) {
+  fs.writeFileSync(FILENAME, articles.join("\n"));
+}
+
 (async () => {
-  let feed = await parser.parseURL("https://www.antaranews.com/rss/olahraga.xml");
-
-  // Select a post
-  const postNumber = getRandomInt(feed.items.length);
-  const selectedPost = feed.items[postNumber];
-
-  // Determine what the time stamp is
-  const postDate = Date.parse(selectedPost.pubDate);
-  const timeSincePost = timeDiff(postDate);
-  // Generate and send post
-  const postLink = selectedPost.link;
-  const status = `${timeSincePost} I wrote an article called, "${selectedPost.title}". ${postLink}`;
-
-  client.post(
-    "statuses/update",
-    {
-      status: status,
-    },
-    function (error, tweet, response) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(tweet);
-      }
-    }
+  let feed = await parser.parseURL(
+    "http://news.google.com/news?hl=en&gl=us&q=bali&um=1&ie=UTF-8&output=rss"
   );
+
+  // Read posted articles from file
+  const postedArticles = readPostedArticles();
+
+  // Filter out posted articles
+  const unpostedArticles = feed.items.filter(
+    (item) => !postedArticles.includes(item.link)
+  );
+
+  // Post unposted articles
+  for (const item of unpostedArticles) {
+    const postDate = Date.parse(item.pubDate);
+    const timeSincePost = timeDiff(postDate);
+    const status = `${timeSincePost} "${item.title}". ${item.link}`;
+
+    client.post(
+      "statuses/update",
+      {
+        status: status,
+      },
+      function (error, tweet, response) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(`Posted: ${item.link}`);
+          // Add posted article to list
+          postedArticles.push(item.link);
+          // Write posted articles to file
+          writePostedArticles(postedArticles);
+        }
+      }
+    );
+  }
 })();
+
+// Function to calculate time difference
+// function timeDiff(pastTime) {
+//   const now = new Date().getTime();
+//   const diff = now - pastTime;
+//   const hours = Math.floor(diff / (1000 * 60 * 60));
+//   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+//   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+//   if (hours > 0) {
+//     return `(${hours}h ${minutes}m ago)`;
+//   } else if (minutes > 0) {
+//     return `(${minutes}m ${seconds}s ago)`;
+//   } else {
+//     return `(${seconds}s ago)`;
+//   }
+// }
