@@ -20,3 +20,5 @@
 
 <li>Catatan: Anda perlu mengganti beberapa nilai dalam kode di atas dengan informasi Anda sendiri, seperti URL RSS feed, nama pengguna Twitter, dan kredensial Twitter Anda yang disimpan dalam variabel lingkungan.
 <ul>
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/87986a74-7531-411b-9f71-f7b4585e9eb5/deploy-status)](https://app.netlify.com/sites/lighthearted-hamster-250998/deploys)
