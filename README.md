@@ -1,7 +1,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/87986a74-7531-411b-9f71-f7b4585e9eb5/deploy-status)](https://app.netlify.com/sites/lighthearted-hamster-250998/deploys)
 [![License ](https://badgen.net/badge/license/MIT/blue)](https://badgen.net/badge/license/MIT/blue)
 [![Defaul Branch ](https://badgen.net/github/checks/node-formidable/node-formidable)](https://badgen.net/github/checks/node-formidable/node-formidable)
-[![RSS FEED](https://badgen.net/badge/icon/rss?icon=rss&label)](https://badgen.net/badge/icon/rss?icon=rss&label)
+[![RSS FEED](https://badgen.net/badge/icon/rss?icon=rss&label)](https://news.google.com/rss/search?hl=en-US&gl=US&q=bali&um=1&ie=UTF-8&ceid=US:en)
 
 # rss-autopost-twitter
 <ul>
