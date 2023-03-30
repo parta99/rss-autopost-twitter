@@ -2,7 +2,7 @@ name: Netlify Builds
 
 on:
   schedule:
-    - cron: "40 03 */1 * *"
+    - cron: "00 04 */1 * *"
 
 jobs:
   build:
