@@ -1,4 +1,5 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/87986a74-7531-411b-9f71-f7b4585e9eb5/deploy-status)](https://app.netlify.com/sites/lighthearted-hamster-250998/deploys)
+[![Netlify Builds](https://github.com/parta99/rss-autopost-twitter/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/parta99/rss-autopost-twitter/actions/workflows/build.yml)
 [![License ](https://badgen.net/badge/license/MIT/blue)](https://github.com/parta99/rss-autopost-twitter/blob/main/LICENSE)
 [![Defaul Branch ](https://badgen.net/github/checks/node-formidable/node-formidable)](https://github.com/parta99/rss-autopost-twitter/tree/main)
 [![RSS FEED](https://badgen.net/badge/icon/rss?icon=rss&label)](https://news.google.com/rss/search?hl=en-US&gl=US&q=bali&um=1&ie=UTF-8&ceid=US:en)
