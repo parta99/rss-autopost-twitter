@@ -70,7 +70,7 @@ function writePostedArticles(articles) {
 
 (async () => {
   let feed = await parser.parseURL(
-    "https://news.google.com/rss/search?hl=en-US&gl=US&q=bali&um=1&ie=UTF-8&ceid=US:en"
+    "https://news.google.com/rss/search?hl=en-US&gl=US&q=bali+&um=1&ie=UTF-8&ceid=US:en"
   );
 
   // Read posted articles from file
