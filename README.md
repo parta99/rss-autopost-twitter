@@ -3,7 +3,7 @@
 [![License ](https://badgen.net/badge/license/MIT/blue)](https://github.com/parta99/rss-autopost-twitter/blob/main/LICENSE)
 [![Defaul Branch ](https://badgen.net/github/checks/node-formidable/node-formidable)](https://github.com/parta99/rss-autopost-twitter/tree/main)
 [![RSS FEED](https://badgen.net/badge/icon/rss?icon=rss&label)](https://news.google.com/rss/search?hl=en-US&gl=US&q=bali&um=1&ie=UTF-8&ceid=US:en)
-[![Twitter ](https://badgen.net/badge/icon/twitter?icon=twitter&label)](https://twitter.com/@djna911)
+[![Twitter ](https://badgen.net/badge/icon/twitter?icon=twitter&label)](https://twitter.com/@fsbali88)
 
 # rss-autopost-twitter
 <ul>
