@@ -21,8 +21,9 @@
   "dependencies": {
     "cron": "^2.3.0",
     "dotenv": "^16.0.3",
+    "jimp": "^0.22.7",
     "rss-parser": "^3.12.0",
     "twit": "^1.1.20",
-    "twitter": "^1.7.1"
+    "twitter": "^1.1.0"
   }
 }
