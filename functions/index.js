@@ -2,6 +2,7 @@ const Parser = require("rss-parser");
 const Twitter = require("twitter");
 const fs = require("fs");
 const dotenv = require("dotenv");
+const { resolve } = require("path");
 dotenv.config();
 
 const parser = new Parser();
@@ -51,7 +52,7 @@ const timeDiff = (prev) => {
 };
 
 const FILENAME = "posted_articles.txt";
-const maxPost = 5;
+const maxPost = 1;
 
 // Function to read posted articles from file
 function readPostedArticles() {
@@ -68,10 +69,11 @@ function writePostedArticles(articles) {
   fs.writeFileSync(FILENAME, articles.join("\n"));
 }
 
+const newsFeedUrls = process.env.NEWS_FEED_URLS.split(',');
 (async () => {
-  let feed = await parser.parseURL(
-    "https://news.google.com/rss/search?hl=en-US&gl=US&q=bali&um=1&ie=UTF-8&ceid=US:en"
-  );
+  // let feed = await parser.parseURL(process.env.NEWS_FEED_URLS);
+  for (const url of newsFeedUrls){
+    let feed = await parser.parseURL(url.trim());
 
   // Read posted articles from file
   const postedArticles = readPostedArticles();
@@ -110,5 +112,7 @@ function writePostedArticles(articles) {
         }
       }
     );
+    // await new Promise((resolve)=> setTimeout(resolve, postInterval));
   }
+ }
 })();
